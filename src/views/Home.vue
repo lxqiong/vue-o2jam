@@ -16,7 +16,7 @@
         </div>
       </div>
       <div id="music_2">
-        <div id="keyboard_1" class="sinkeyborad" >
+        <div id="keyboard_1" class="sinkeyborad" @click="handle_s">
           S
           <!-- <div class="rightcorner">
           </div>-->
@@ -60,7 +60,7 @@ export default {
   data: function () {
     return {
       channles: [1, 2, 3, 4, 5, 6, 7],
-      show: true,
+      show: false,
       isfires: false,
       icount: 0,
     };
@@ -94,6 +94,16 @@ export default {
       // this.isfires=false;
       this.show = true;
     },
+    handle_s:function(){
+      console.log("handle_s");
+       var keys = document.getElementById("keyboard_1");
+        keys.style="animation: ripple 1s";
+        keys.style.display;
+        setTimeout(function(){
+          keys.style="animation: none";
+
+        },1000)
+    }
   },
   created() {
     console.log("created");
@@ -103,15 +113,7 @@ export default {
         console.log("空格");
       } else if (key == 83) {
         console.log("s");
-      
-        var keys = document.getElementById("keyboard_1");
-        if (document.all) {
-          keys.click();
-        } else {
-          var e = document.createEvent("MouseEvents");
-          e.initEvent("click", true, true);
-          keys.dispatchEvent(e);
-        }
+        this.handle_s();
       }
     };
   },
@@ -287,6 +289,9 @@ export default {
     justify-content: space-between;
 
     background-color: black;
+    // #keyboard_1{
+    //   animation: ripple 1s;
+    // }
     .sinkeyborad {
       display: flex;
       width: 100%;
@@ -295,9 +300,10 @@ export default {
       border: 2px solid black;
       align-items: center;
       justify-content: center;
-      &:active {
-        animation: ripple 1s;
-      }
+      
+      // &:active {
+      //   animation: ripple 1s;
+      // }
     }
     .evenkeyborad {
       display: flex;

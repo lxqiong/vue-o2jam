@@ -1,47 +1,34 @@
 <template>
   <div class="home">
     <div id="music">
-      <div id="music_1">
-        <div v-for="(item,index) in channles" :key="channles+index" class="music_channle">
-          <div class="rectangle" v-if="show" @animationend="transitionComplete">
-            <div class="fires" v-if="isfires">
-              <div class="leftfire"></div>
-              <div class="middlefire"></div>
-              <div class="rightfire"></div>
-              <div class="secondleftfire"></div>
-              <div class="secondmiddlefire"></div>
-              <div class="secondrightfire"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Block :show="isshow"></Block>
       <div id="music_2">
         <div id="keyboard_1" class="sinkeyborad" @click="handle_s">
           S
-          <!-- <div class="rightcorner">
-          </div>-->
+          <div class="rightcorner">
+          </div>
         </div>
-        <div id="keyboard_2" class="evenkeyborad">D</div>
-        <div id="keyboard_3" class="sinkeyborad">
+        <div id="keyboard_2" class="evenkeyborad" @click="handle_d">D</div>
+        <div id="keyboard_3" class="sinkeyborad" @click="handle_f">
           <div class="leftcorner"></div>
           <div class="rightcorner"></div>F
         </div>
-        <div id="keyboard_4" class="evenkeyborad" @keyup.enter="recvspace">spa</div>
-        <div id="keyboard_5" class="sinkeyborad">
+        <div id="keyboard_4" class="evenkeyborad" @click="handle_spa">spa</div>
+        <div id="keyboard_5" class="sinkeyborad"  @click="handle_j">
           <div class="leftcorner"></div>
           <div class="rightcorner"></div>J
         </div>
-        <div id="keyboard_6" class="evenkeyborad">K</div>
-        <div id="keyboard_7" class="sinkeyborad">
+        <div id="keyboard_6" class="evenkeyborad" @click="handle_k">K</div>
+        <div id="keyboard_7" class="sinkeyborad" @click="handle_l">
           <div class="leftcorner"></div>L
         </div>
       </div>
       <div id="music_3">
         <TypeButton
-          @click="gamestart1"
+          @click="gamestart"
           class="gamestart"
           type="defaul"
-          v-on:restart="gamestart1"
+          v-on:restart="gamestart"
         >游戏开始</TypeButton>
       </div>
     </div>
@@ -51,69 +38,106 @@
 
 <script>
 import TypeButton from "../components/TypeButton";
+import Block from "../components/Block"
 
 export default {
   name: "Home",
   components: {
     TypeButton,
+    Block,
   },
   data: function () {
     return {
-      channles: [1, 2, 3, 4, 5, 6, 7],
-      show: false,
-      isfires: false,
-      icount: 0,
+      isshow: false,
     };
   },
   methods: {
-    gamestart1: function () {
+    gamestart: function () {
       console.log("111");
-      this.isfires = false;
-      this.show = true;
+      this.isshow = true;
       return;
-    },
-    recvspace: function () {
-      console.log("space");
-    },
-    transitionComplete: function () {
-      console.log("transitionComplete");
-      this.icount++;
-      this.isfires = true;
-      if (this.icount && this.icount % 49 == 0) {
-        this.show = false;
-        this.isfires = true;
-        setTimeout(() => {
-          console.log("restart");
-          console.log(this);
-          this.gamestart1();
-        }, 0);
-      }
-    },
-    afterfires: function () {
-      console.log("afterfires");
-      // this.isfires=false;
-      this.show = true;
     },
     handle_s:function(){
       console.log("handle_s");
        var keys = document.getElementById("keyboard_1");
         keys.style="animation: ripple 1s";
-        keys.style.display;
         setTimeout(function(){
           keys.style="animation: none";
-
         },1000)
-    }
+    },
+    handle_d:function(){
+      console.log("handle_d");
+       var keys = document.getElementById("keyboard_2");
+        keys.style="animation: ripple 1s";
+        setTimeout(function(){
+          keys.style="animation: none";
+        },1000)
+        this.isshow = false;
+        setTimeout(()=>{
+          this.isshow = true;
+        },0);
+    },
+    handle_f:function(){
+      console.log("handle_f");
+       var keys = document.getElementById("keyboard_3");
+        keys.style="animation: ripple 1s";
+        setTimeout(function(){
+          keys.style="animation: none";
+        },1000)
+    },
+    handle_spa:function(){
+      console.log("handle_spa");
+       var keys = document.getElementById("keyboard_4");
+        keys.style="animation: ripple 1s";
+        setTimeout(()=>{
+          keys.style="animation: none";
+        },1000)
+    },
+    handle_j:function(){
+      console.log("handle_j");
+       var keys = document.getElementById("keyboard_5");
+        keys.style="animation: ripple 1s";
+        setTimeout(function(){
+          keys.style="animation: none";
+        },1000)
+    },
+    handle_k:function(){
+      console.log("handle_k");
+       var keys = document.getElementById("keyboard_6");
+        keys.style="animation: ripple 1s";
+        setTimeout(function(){
+          keys.style="animation: none";
+        },1000)
+    },
+     handle_l:function(){
+      console.log("handle_l");
+       var keys = document.getElementById("keyboard_7");
+        keys.style="animation: ripple 1s";
+        setTimeout(function(){
+          keys.style="animation: none";
+        },1000)
+    },
+
   },
   created() {
     console.log("created");
+    console.log(this);
     document.onkeydown = () => {
       var key = window.event.keyCode;
       if (key == 32) {
-        console.log("空格");
+        this.handle_spa();
       } else if (key == 83) {
-        console.log("s");
         this.handle_s();
+      }else if(key==70){
+        this.handle_f();
+      }else if(key==68){
+        this.handle_d();
+      }else if(key==74){
+        this.handle_j();
+      }else if(key==75){
+        this.handle_k();
+      }else if(key==76){
+         this.handle_l();
       }
     };
   },
@@ -150,138 +174,6 @@ export default {
     justify-content: space-between;
     background-color: black;
     position: relative;
-    @keycolor: aqua;
-    .music_channle {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      border: 1px solid red;
-      position: relative;
-      justify-content: center;
-      .rectangle {
-        width: 90%;
-        height: 2%;
-        background-color: @keycolor;
-        position: relative;
-        animation: recdown 5s;
-        animation-fill-mode: forwards;
-        opacity: 1;
-      }
-      @keyframes recdown {
-        to {
-          transform: translateY(calc(768px * 0.83));
-          opacity: 0.3;
-        }
-      }
-      .leftfire {
-        width: 33%;
-        height: 50%;
-        background-color: @keycolor;
-        animation: leftbomb 1s;
-        position: absolute;
-        top: 0;
-        left: 0;
-        animation-fill-mode: forwards;
-        opacity: 1;
-      }
-      .middlefire {
-        width: 33%;
-        height: 50%;
-        background-color: @keycolor;
-        animation: middlebomb 1s;
-        position: absolute;
-        top: 0;
-        left: 33%;
-        animation-fill-mode: forwards;
-        opacity: 1;
-      }
-      .rightfire {
-        width: 33%;
-        height: 50%;
-        background-color: @keycolor;
-        animation: rightbomb 1s;
-        position: absolute;
-        top: 0;
-        right: 0;
-        animation-fill-mode: forwards;
-        opacity: 1;
-      }
-      .secondleftfire {
-        width: 33%;
-        height: 50%;
-        background-color: @keycolor;
-        animation: secondleftbomb 1s;
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        animation-fill-mode: forwards;
-        opacity: 1;
-      }
-      .secondmiddlefire {
-        width: 33%;
-        height: 50%;
-        background-color: @keycolor;
-        animation: secondmiddlebomb 1s;
-        position: absolute;
-        bottom: 0;
-        left: 33%;
-        animation-fill-mode: forwards;
-        opacity: 1;
-      }
-      .secondrightfire {
-        width: 33%;
-        height: 50%;
-        background-color: @keycolor;
-        animation: secondrightbomb 1s;
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        animation-fill-mode: forwards;
-        opacity: 1;
-      }
-      @keyframes leftbomb {
-        to {
-          transform: translate(-10px, -10px);
-          opacity: 0;
-          border-radius: 2px;
-        }
-      }
-      @keyframes middlebomb {
-        to {
-          transform: translate(0, -10px);
-          opacity: 0;
-          border-radius: 2px;
-        }
-      }
-      @keyframes rightbomb {
-        to {
-          transform: translate(10px, -10px);
-          opacity: 0;
-          border-radius: 2px;
-        }
-      }
-      @keyframes secondleftbomb {
-        to {
-          transform: translate(-10px, 10px) scale(2);
-          opacity: 0;
-          border-radius: 2px;
-        }
-      }
-      @keyframes secondmiddlebomb {
-        to {
-          transform: translate(0, 10px);
-          opacity: 0;
-          border-radius: 2px;
-        }
-      }
-      @keyframes secondrightbomb {
-        to {
-          transform: translate(10px, 10px);
-          opacity: 0;
-          border-radius: 2px;
-        }
-      }
-    }
   }
   #music_2 {
     display: flex;
@@ -289,9 +181,6 @@ export default {
     justify-content: space-between;
 
     background-color: black;
-    // #keyboard_1{
-    //   animation: ripple 1s;
-    // }
     .sinkeyborad {
       display: flex;
       width: 100%;
@@ -300,10 +189,6 @@ export default {
       border: 2px solid black;
       align-items: center;
       justify-content: center;
-      
-      // &:active {
-      //   animation: ripple 1s;
-      // }
     }
     .evenkeyborad {
       display: flex;

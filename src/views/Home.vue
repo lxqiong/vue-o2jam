@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div id="music">
-      <Block :show="isshow"></Block>
+      <Block :show="this.$store.state.isshow" ></Block>
       <div id="music_2">
         <div id="keyboard_1" class="sinkeyborad" @click="handle_s">
           S
@@ -29,17 +29,21 @@
           class="gamestart"
           type="defaul"
           v-on:restart="gamestart"
+          @ended="musicover"
         >游戏开始</TypeButton>
       </div>
     </div>
-    <div id="content">bb</div>
+    <div id="content">
+      <div class="musicname">当前歌曲:{{music}}</div>
+      <div class="musicscore">游戏得分:{{this.$store.state.score}}</div>
+    </div>
   </div>
 </template>
 
 <script>
 import TypeButton from "../components/TypeButton";
 import Block from "../components/Block"
-
+import Vue from 'vue'
 export default {
   name: "Home",
   components: {
@@ -48,74 +52,85 @@ export default {
   },
   data: function () {
     return {
-      isshow: false,
+      music:"爱转角",
+      audioplayer:null,
+      startTimer:null,
     };
   },
   methods: {
     gamestart: function () {
-      console.log("111");
-      this.isshow = true;
+      if(this.audioplayer){
+        this.audioplayer.pause();
+        console.log("gameover");
+        this.audioplayer = null;
+        this.$store.state.isplay = false;
+        this.$store.state.isshow.forEach((value,index) => {
+          Vue.set(this.$store.state.isshow,index,false);
+        });
+        return;
+
+      }
+      this.$store.state.score=0;
+      this.$store.state.isplay = true;
+      console.log("start");
+      this.$store.state.isshow.forEach((value,index) => {
+          setTimeout(()=>{
+          if(this.$store.state.isplay)
+          console.log("ccc"+this.$store.state.isshow[1])
+            Vue.set(this.$store.state.isshow,index,true);
+        },index*1000)
+      });
+      // Vue.set(this.$store.state.isshow,1,true);
+      // this.musicover()
+      
       return;
+    },
+    musicover:function(){
+      this.audioplayer= new Audio("https://ip-h5-ra01-sycdn.kuwo.cn/5fbffa78ca5b5cc867250b608167e9cb/5f5463d7/resource/n1/128/30/32/236287623.mp3");
+      this.audioplayer.addEventListener('ended',()=>{
+        alert("结束")
+        console.log('over')
+      },false)
+      this.audioplayer.play();
+    },
+
+    handle_keyboard:function(index){
+      var keyboardName = "keyboard_"+index;
+      var keys = document.getElementById(keyboardName);
+        keys.style="animation: ripple 1s";
+        setTimeout(function(){
+          keys.style="animation: none";
+        },1000)
+        Vue.set(this.$store.state.isshow,index,false);
+
     },
     handle_s:function(){
       console.log("handle_s");
-       var keys = document.getElementById("keyboard_1");
-        keys.style="animation: ripple 1s";
-        setTimeout(function(){
-          keys.style="animation: none";
-        },1000)
+      this.handle_keyboard(1);
     },
     handle_d:function(){
       console.log("handle_d");
-       var keys = document.getElementById("keyboard_2");
-        keys.style="animation: ripple 1s";
-        setTimeout(function(){
-          keys.style="animation: none";
-        },1000)
-        this.isshow = false;
-        setTimeout(()=>{
-          this.isshow = true;
-        },0);
+      this.handle_keyboard(2);
     },
     handle_f:function(){
       console.log("handle_f");
-       var keys = document.getElementById("keyboard_3");
-        keys.style="animation: ripple 1s";
-        setTimeout(function(){
-          keys.style="animation: none";
-        },1000)
+      this.handle_keyboard(3);
     },
     handle_spa:function(){
       console.log("handle_spa");
-       var keys = document.getElementById("keyboard_4");
-        keys.style="animation: ripple 1s";
-        setTimeout(()=>{
-          keys.style="animation: none";
-        },1000)
+      this.handle_keyboard(4);
     },
     handle_j:function(){
       console.log("handle_j");
-       var keys = document.getElementById("keyboard_5");
-        keys.style="animation: ripple 1s";
-        setTimeout(function(){
-          keys.style="animation: none";
-        },1000)
+      this.handle_keyboard(5);
     },
     handle_k:function(){
       console.log("handle_k");
-       var keys = document.getElementById("keyboard_6");
-        keys.style="animation: ripple 1s";
-        setTimeout(function(){
-          keys.style="animation: none";
-        },1000)
+      this.handle_keyboard(6);
     },
      handle_l:function(){
       console.log("handle_l");
-       var keys = document.getElementById("keyboard_7");
-        keys.style="animation: ripple 1s";
-        setTimeout(function(){
-          keys.style="animation: none";
-        },1000)
+      this.handle_keyboard(7);
     },
 
   },
@@ -254,5 +269,12 @@ export default {
   width: 70%;
   background-color: yellow;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content:space-evenly;
+  .musicname .musicscore{
+    display: flex;
+    overflow: hidden;
+  }
 }
 </style>
